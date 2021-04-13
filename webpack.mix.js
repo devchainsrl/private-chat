@@ -1,4 +1,6 @@
 const mix = require('laravel-mix');
+// process dot env
+require('dotenv').config();
 
 /*
  |--------------------------------------------------------------------------
