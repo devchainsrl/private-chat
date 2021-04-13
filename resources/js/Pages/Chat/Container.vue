@@ -2,7 +2,12 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Chat
+                <chat-room-select
+                    v-if="currentRoom.id"
+                    :rooms="chatRooms"
+                    :currentRoom="currentRoom"
+                    v-on:roomchanged="setRoom($event)"
+                />
             </h2>
         </template>
 
@@ -22,9 +27,11 @@ import AppLayout from '@/Layouts/AppLayout'
 import Welcome from '@/Jetstream/Welcome'
 import MessageContainer from "@/Pages/Chat/MessageContainer";
 import InputMessage from "@/Pages/Chat/InputMessage";
+import ChatRoomSelect from "@/Pages/Chat/ChatRoomSelect";
 
 export default {
     components: {
+        ChatRoomSelect,
         InputMessage,
         MessageContainer,
         AppLayout,
@@ -53,9 +60,14 @@ export default {
             })
         },
         setRoom(room) {
-            console.log('room set: ' + room.id)
+            console.log('setRoom () ->  ',  room)
+            if (!room) {
+                return;
+            }
+
             this.currentRoom = room;
             this.getMessages()
+            console.log('room set: ' + room.id)
         }
     },
     created() {
