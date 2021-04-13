@@ -43,7 +43,27 @@ export default {
             messages: [],
         }
     },
+    watch: {
+        currentRoom(val, oldVal) {
+            console.log('chg CR')
+            if (oldVal.id) {
+                this.disconnect(oldVal)
+            }
+            this.connect();
+        }
+    },
     methods: {
+        connect() {
+            if (this.currentRoom.id) {
+                let vm = this;
+                window.Echo.private("chat." + this.currentRoom.id).listen('.message.new', e => {
+                    vm.getMessages();
+                })
+            }
+        },
+        disconnect(room) {
+            window.Echo.leave("chat." + room.id);
+        },
         getRooms() {
             axios.get('/chat/rooms').then(response => {
                 this.chatRooms = response.data
@@ -60,13 +80,13 @@ export default {
             })
         },
         setRoom(room) {
-            console.log('setRoom () ->  ',  room)
+            console.log('setRoom () ->  ', room)
             if (!room) {
                 return;
             }
 
             this.currentRoom = room;
-            this.getMessages()
+            // this.getMessages()
             console.log('room set: ' + room.id)
         }
     },
