@@ -18,7 +18,7 @@ class CreateChatMessagesTable extends Migration
             $table->integer('chat_room_id')->index();
             $table->integer('user_id');
             $table->mediumText('message');
-            
+
             $table->timestamps();
         });
     }
